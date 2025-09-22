@@ -23,7 +23,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 		"name": "ADSB - Aircraft tracking",
 		"description": "Provides aircraft data for display in the captured images",
 		"module": "allsky_adsb",    
-		"version": "v1.0.0",
+		"version": "v2.0.0",
 		"group": "Data Capture",
 		"events": [
 			"periodic",
@@ -93,7 +93,10 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 				"AS_TOTAL_AIRCRAFT": {
 					"group": "ADSB Data",
 					"type": "number",                
-					"description": "Total Aircraft"
+					"description": "Total Aircraft",
+					"database": {
+						"include" : "true"
+					}     
 				},
 				"AS_DISTANCE_AIRCRAFT${COUNT}": {
 					"group": "ADSB Data",
@@ -247,6 +250,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 				"description": "Local ADSB Address",
 				"help": "See the help for how to obtain this address",
 				"tab": "Data Source",
+				"secret": "true",
 				"filters": {
 					"filter": "data_source",
 					"filtertype": "show",
@@ -260,6 +264,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 				"description": "OpenSky Username",
 				"help": "Your username for the Opensky Network. See the module documentaiton for details on the api limits with and without a username",
 				"tab": "Data Source",
+				"secret": "true",    
 				"filters": {
 					"filter": "data_source",
 					"filtertype": "show",
@@ -273,6 +278,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 				"description": "OpenSky Password",
 				"help": "Your password for the Opensky Network",
 				"tab": "Data Source",
+				"secret": "true",    
 				"filters": {
 					"filter": "data_source",
 					"filtertype": "show",
@@ -418,7 +424,14 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 					"authorurl": "https://github.com/allskyteam",
 					"changes": "Initial Release"
 				}
-			]
+			],
+			"v2.0.0" : [
+				{
+					"author": "Alex Greenland",
+					"authorurl": "https://github.com/allskyteam",
+					"changes": "Updates for new module system"
+				}
+			]   
 		}
 	}
 
@@ -526,11 +539,27 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 									'elevation': aircraft_elevation   
 								}
 							else:
-								self.__add_warning('ground', aircraft['flight'].rstrip())
+								code = "Unknown"
+								if "flight" in aircraft:
+									code = aircraft['flight'].rstrip()
+								if "hex" in aircraft:
+									code = aircraft['hex'].rstrip()
+			
+								self.__add_warning('ground', code)
 						else:
-							self.__add_warning('altitude', aircraft['flight'].rstrip())
+							code = "Unknown"
+							if "flight" in aircraft:
+								code = aircraft['flight'].rstrip()
+							if "hex" in aircraft:
+								code = aircraft['hex'].rstrip()         
+							self.__add_warning('altitude', code)
 					else:
-						allsky_shared.log(4, f'INFO: {flight} has no location so ignoring')
+						code = "Unknown"
+						if "flight" in aircraft:
+							code = aircraft['flight'].rstrip()
+						if "hex" in aircraft:
+							code = aircraft['hex'].rstrip()          
+						allsky_shared.log(4, f'INFO: {code} has no location so ignoring')
 			else:
 				result = f'ERROR: Failed to retrieve data from "{url}". {response.status_code} - {response.text}'
 		except Exception as data_exception:
@@ -945,7 +974,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 				message = self.__get_warnings('location')
 				if message != '':
 					allsky_shared.log(4, f'INFO: {message} have no location so ignoring')
-          		
+
 			else:
 				result = f'Will run in {(period - diff):.0f} seconds'
 				allsky_shared.log(4,f'INFO: {result}')
