@@ -16,6 +16,7 @@ class ALLSKYSCRIPT(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Run a Script",
 		"description": "Run a custom script",
+		"docs": "docs/allsky_modules/extra/run_script.html",  
 		"version": "v1.0.1",
 		"testable": "true", 
 		"events": [

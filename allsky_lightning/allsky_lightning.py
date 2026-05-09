@@ -11,6 +11,7 @@ class ALLSKYLIGHTNING(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Lightning Detection",
 		"description": "Detects lightning using an as3935 sensor",
+		"docs": "docs/allsky_modules/extra/lightning.html",   
 		"version": "v1.0.0",
 		"module": "allsky_lightning", 
 		"centersettings": "false",

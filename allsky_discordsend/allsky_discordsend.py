@@ -13,6 +13,7 @@ class ALLSKYDISCORD(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Post Image to Discord",
 		"description": "Post an image to a Discord server",
+		"docs": "docs/allsky_modules/extra/discord.html",    
 		"version": "v1.0.3",
 		"pythonversion": "3.9.0",
 		"centersettings": "false",

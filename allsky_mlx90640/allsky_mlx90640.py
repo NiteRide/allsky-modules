@@ -24,6 +24,7 @@ class ALLSKYMLX90640(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Generate a thermal image",
 		"description": "Generate a thermal image from the MLX90640 IR Sensor",
+		"docs": "docs/allsky_modules/extra/mlx90640.html",     
 		"module": "allsky_mlx90640",
 		"centersettings": "false",
 		"version": "v1.0.2",

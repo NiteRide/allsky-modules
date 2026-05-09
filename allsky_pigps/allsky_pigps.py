@@ -20,6 +20,7 @@ class ALLSKYGPS(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Get GPS Data",
 		"description": "Set date/time and position from an attached GPS",
+		"docs": "docs/allsky_modules/extra/gps.html",  
 		"version": "v2.0.1",
 		"module": "allsky_pigps",
 		"centersettings": "false",

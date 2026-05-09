@@ -32,6 +32,7 @@ class ALLSKYTEMP(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Environment Monitor",
 		"description": "Obtain environment data (temperature/humidity) from external sensors",
+		"docs": "docs/allsky_modules/extra/environment.html",    
 		"module": "allsky_temp",
 		"version": "v1.0.4",
 		"events": [

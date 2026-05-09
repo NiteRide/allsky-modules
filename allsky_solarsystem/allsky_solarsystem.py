@@ -33,6 +33,7 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Get Solar System Data",
 		"description": "Obtain data for Solar System objects",
+		"docs": "docs/allsky_modules/extra/solar_system.html",  
 		"module": "allsky_solarsystem",
 		"version": "v1.1.0",
 		"testable": "true",

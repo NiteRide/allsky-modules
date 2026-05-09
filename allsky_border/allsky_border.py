@@ -20,6 +20,7 @@ class ALLSKYBORDER(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Add Border to Image",
 		"description": "Add a border to an image to increase its size.",
+		"docs": "docs/allsky_modules/extra/border.html",    
 		"module": "allsky_border",
 		"version": "v1.0.1",
 		"group": "Image Adjustments",

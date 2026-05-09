@@ -22,6 +22,7 @@ class ALLSKYADSB(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "ADS-B Aircraft Tracking Data",
 		"description": "Provide aircraft data for display on images",
+		"docs": "docs/allsky_modules/extra/adsb.html",   
 		"module": "allsky_adsb",    
 		"version": "v2.0.1",
 		"group": "Data Capture",

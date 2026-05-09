@@ -16,6 +16,7 @@ class ALLSKYESP32ROUND(ALLSKYMODULEBASE):
     meta_data = {
         "name": "AllSKY Round Display",
         "description": "Exports an image for use on a round oled display",
+		"docs": "docs/allsky_modules/extra/esp32round.html",           
         "version": "v1.0.0",    
         "events": [
             "day",

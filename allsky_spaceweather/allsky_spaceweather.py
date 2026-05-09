@@ -21,6 +21,7 @@ class ALLSKYSPACEWEATHER(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Space Weather",
 		"description": "Retrieve space weather data from NOAA SWPC",
+		"docs": "docs/allsky_modules/extra/space_weather.html",    
 		"module": "allsky_spaceweather",
 		"version": "v1.0.2",
 		"centersettings": "false",

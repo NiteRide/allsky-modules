@@ -21,6 +21,7 @@ class ALLSKYLIGHT(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Light Meter",
 		"description": "Estimate sky brightness from a light sensor (tls2591/tsl2561/ltr390)",
+		"docs": "docs/allsky_modules/extra/light.html",   
 		"module": "allsky_light",
 		"version": "v1.0.3",
 		"centersettings": "false",

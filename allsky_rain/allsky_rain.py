@@ -18,6 +18,7 @@ class ALLSKYRAIN(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Rain Detection",
 		"description": "Detect rain via an external digital sensor",
+		"docs": "docs/allsky_modules/extra/rain.html",     
 		"module": "allsky_rain",
 		"centersettings": "false",
 		"testable": "true", 

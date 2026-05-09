@@ -29,6 +29,7 @@ class ALLSKYPMSX003(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Air Quality Monitor",
 		"description": "Monitor air quality using a pms5003, pms7003 or pmsa003",
+		"docs": "docs/allsky_modules/extra/air_quality.html",   
 		"module": "allsky_pmsx003",
 		"version": "v1.0.2",
 		"events": [

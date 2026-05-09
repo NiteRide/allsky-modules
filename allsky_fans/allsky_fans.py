@@ -21,6 +21,7 @@ class ALLSKYFANS(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Pi Fan Control",
 		"description": "Control a Pi fan based on CPU or external sensor temperature",
+		"docs": "docs/allsky_modules/extra/fans.html",    
 		"module": "allsky_fans",
 		"version": "v1.0.3",
 		"testable": "true",

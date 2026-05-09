@@ -15,6 +15,7 @@ class ALLSKYHDDTEMP(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Output Disk Drive Temperature",
 		"description": "Output Disk Drive Temperature for use in overlays.",
+		"docs": "docs/allsky_modules/extra/hddtemp.html",     
 		"module": "allsky_hddtemp",
 		"version": "v1.0.1",
 		"events": [

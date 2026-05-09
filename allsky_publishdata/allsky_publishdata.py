@@ -30,6 +30,7 @@ class ALLSKYPUBLISHDATA(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Publish Data to Redis/MQTT/REST/influxDB",
 		"description": "Publish Allsky data to Redis, MQTT, REST, or influxDB",
+		"docs": "docs/allsky_modules/extra/publish_data.html",     
 		"module": "allsky_publishdata",
 		"version": "v1.0.5",
 		"centersettings": "false",

@@ -15,6 +15,7 @@ class ALLSKYPOWER(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Monitor Pi Current and Voltage",
 		"description": "Monitor Pi current and voltage using an ina219/ina260/ina3221",
+		"docs": "docs/allsky_modules/extra/power.html",   
 		"module": "allsky_power",
 		"version": "v1.1.0",
 		"centersettings": "false",

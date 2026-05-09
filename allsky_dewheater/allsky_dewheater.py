@@ -59,6 +59,7 @@ class ALLSKYDEWHEATER(ALLSKYMODULEBASE):
 	meta_data = {
 		"name": "Dew Heater Control",
 		"description": "Control a dew heater via a temperature and humidity sensor",
+		"docs": "docs/allsky_modules/extra/dew_heater.html",  
 		"module": "allsky_dewheater",
 		"version": "v2.0.0",
 		"events": [
