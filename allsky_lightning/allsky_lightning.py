@@ -2,9 +2,8 @@ import allsky_shared as allsky_shared
 from allsky_base import ALLSKYMODULEBASE
 
 import time
-import board
-import digitalio
-import sparkfun_qwiicas3935
+import requests
+import json
 
 class ALLSKYLIGHTNING(ALLSKYMODULEBASE):
 
@@ -175,101 +174,86 @@ class ALLSKYLIGHTNING(ALLSKYMODULEBASE):
 		spike_rejection = self.get_param('spikerejection', 2, int)
 		lightning_threshold = self.get_param('lightningthreshold', 1, int)
 		expire_strikes = self.get_param('expirestrikes', 600, int)
-  
-		as3935_interrupt_pin = digitalio.DigitalInOut(board.D21)
-		as3935_interrupt_pin.direction = digitalio.Direction.INPUT
-		as3935_interrupt_pin.pull = digitalio.Pull.DOWN
-		i2c = board.I2C()
-
+		interrupt_pin = self.get_param('interruptpin', '21', str, True)
 		i2c_address = self.get_param('i2caddress', '', str)
-		if i2c_address != "":
-			try:
-				i2c_address_int = int(i2c_address, 16)
-			except Exception as e:
-				result = 'Address {i2c_address} is not a valid i2c address'
-				self.log(0, "ERROR in {__file__}: {}".format(result))
-    
-		if i2c_address != "":    
-			lightning = sparkfun_qwiicas3935.Sparkfun_QwiicAS3935_I2C(i2c, i2c_address_int)
-		else:
-			lightning = sparkfun_qwiicas3935.Sparkfun_QwiicAS3935_I2C(i2c)
 
-		if lightning.connected:
-			self.log(4, 'INFO: Lightning Detector Ready')
-		
-			afe_mode = lightning.indoor_outdoor
-			if afe_mode == lightning.OUTDOOR:
-				self.log(4, 'INFO: The Lightning Detector is in the Outdoor mode.')
-			elif afe_mode == lightning.INDOOR:
-				self.log(4, 'INFO: The Lightning Detector is in the Indoor mode.')
-			else:
-				self.log(4, f'INFO: The Lightning Detector is in an Unknown mode. Mode = {afe_mode}')
-			
-			lightning.mask_disturber = mask_disturbers
-			if lightning.mask_disturber:
-				self.log(4, 'INFO: Disturbers are being masked.')
-			else:
-				self.log(4, 'INFO: Disturbers are not being masked.')
+		config = {
+			"interruptpin": interrupt_pin,
+			"i2caddress": i2c_address,
+			"maskdisturbers": mask_disturbers,
+			"noiselevel": noise_level,
+			"watchdogthreshold": watchdog_threshold,
+			"spikerejection": spike_rejection,
+			"lightningthreshold": lightning_threshold
+		}
 
-			lightning.noise_level = noise_level
-			self.log(4, f'INFO: Noise level is set at: {noise_level}')
+		try:
+			api_url = allsky_shared.get_api_url()
+			config_response = requests.put(f'{api_url}/lightning/config', json=config, timeout=5)
+			if config_response.status_code == 503:
+				data = config_response.json()
+				result = data.get("error", "Lightning monitor is not available")
+				self.log(0, f'ERROR in {__file__}: {result}')
+				return result
 
-			lightning.watchdog_threshold = watchdog_threshold
-			self.log(4, f'INFO: Watchdog Threshold is set to: {watchdog_threshold}')
+			config_response.raise_for_status()
 
-			lightning.spike_rejection = spike_rejection
-			self.log(4, f'INFO: Spike Rejection is set to: {spike_rejection}')
+			status_response = requests.get(f'{api_url}/lightning/status', timeout=2)
+			status_response.raise_for_status()
+			status = status_response.json()
+   
+			print(json.dumps(status, indent=4))
+   
+			if not status.get("running"):
+				result = status.get("error", "Lightning monitor is not running")
+				self.log(0, f'ERROR in {__file__}: {result}')
+				return result
 
-			lightning.lightning_threshold = lightning_threshold
-			self.log(4, f'INFO:The number of strikes before interrupt is triggered: {lightning_threshold}')
- 
-			if as3935_interrupt_pin.value:
-				interrupt_value = lightning.read_interrupt_register()
-				#interrupt_value = lightning.LIGHTNING
-				if interrupt_value == lightning.NOISE:
-					self.log(4, f'INFO: Noise detected')
-				elif interrupt_value == lightning.DISTURBER:
-					self.log(4, f'INFO: Disturber detected')
-				elif interrupt_value == lightning.LIGHTNING:
-					distance_to_storm = lightning.distance_to_storm
-					lightning_energy = lightning.lightning_energy
-					count = allsky_shared.db_get('allsky_lightning_strike_counter')
-					if count is None:
-						count = 1
-					else:
-						count = int(count) + 1
-		
-					last_strike_time = int(time.time()) 
-					extra_data = {}
-					extra_data['AS_LIGHTNING_COUNT'] = count
-					extra_data['AS_LIGHTNING_LAST'] = last_strike_time
-					extra_data['AS_LIGHTNING_DIST'] = distance_to_storm    
-					extra_data['AS_LIGHTNING_ENERGY'] = lightning_energy    
-					allsky_shared.saveExtraData(self.meta_data['extradatafilename'], extra_data, self.meta_data['module'], self.meta_data['extradata'], event=self.event)
-		
-					allsky_shared.dbUpdate('allsky_lightning_strike_counter', count)
-					allsky_shared.dbUpdate('allsky_lightning_last_strike', last_strike_time)    
-					self.log(4, f'INFO: Strike detected. Approx distance: {distance_to_storm}km, Energy: {lightning_energy}, Total Strikes: {count}')
-				else:
-					self.log(4, f'INFO: Unknown event detected')
-			else:
-				self.log(4, f'INFO: No event detected')
+			count = int(status.get("strike_count") or 0)
+			last_strike_time = status.get("last_strike")
+			distance_to_storm = status.get("distance") or 0
+			lightning_energy = status.get("energy") or 0
+			last_interrupt_type = status.get("last_interrupt_type")
 
-			last_strike_time = allsky_shared.db_get('allsky_lightning_last_strike')
+			extra_data = {}
+			extra_data['AS_LIGHTNING_COUNT'] = count
+			extra_data['AS_LIGHTNING_LAST'] = last_strike_time
+			extra_data['AS_LIGHTNING_DIST'] = distance_to_storm
+			extra_data['AS_LIGHTNING_ENERGY'] = lightning_energy
+
 			if last_strike_time is not None:
 				now = int(time.time())
-				if (now - last_strike_time) > expire_strikes:
-					allsky_shared.db_delete_key('allsky_lightning_last_strike')
-					extra_data = {}
-					extra_data['AS_LIGHTNING_COUNT'] = count
-					extra_data['AS_LIGHTNING_LAST'] = last_strike_time
-					extra_data['AS_LIGHTNING_DIST'] = 0    
-					extra_data['AS_LIGHTNING_ENERGY'] = 0    
-					allsky_shared.saveExtraData(self.meta_data['extradatafilename'], extra_data, self.meta_data['module'], self.meta_data['extradata'], event=self.event)
-       
-		else:
-			result = 'Lightning Detector does not appear to be connected. Please check wiring.'
+				if (now - int(last_strike_time)) > expire_strikes:
+					requests.post(f'{api_url}/lightning/reset', timeout=2).raise_for_status()
+					count = 0
+					last_strike_time = None
+					extra_data['AS_LIGHTNING_COUNT'] = 0
+					extra_data['AS_LIGHTNING_LAST'] = None
+					extra_data['AS_LIGHTNING_DIST'] = 0
+					extra_data['AS_LIGHTNING_ENERGY'] = 0
+
+			allsky_shared.saveExtraData(self.meta_data['extradatafilename'], extra_data, self.meta_data['module'], self.meta_data['extradata'], event=self.event)
+			allsky_shared.dbUpdate('allsky_lightning_strike_counter', count)
+			if last_strike_time is not None:
+				allsky_shared.dbUpdate('allsky_lightning_last_strike', last_strike_time)
+			else:
+				allsky_shared.db_delete_key('allsky_lightning_last_strike')
+
+			result = f'Lightning monitor running on GPIO {interrupt_pin}. Strikes: {count}'
+			if last_interrupt_type == "lightning":
+				result = f'Strike detected. Approx distance: {distance_to_storm}km, Energy: {lightning_energy}, Total Strikes: {count}'
+
+			self.log(4, f'INFO: {result}')
+			return result
+
+		except requests.exceptions.ConnectionError:
+			result = 'Unable to connect to the Allsky server. Is it running?'
 			self.log(0, f'ERROR in {__file__}: {result}')
+			return result
+		except requests.exceptions.RequestException as e:
+			result = f'Lightning monitor request failed: {e}'
+			self.log(0, f'ERROR in {__file__}: {result}')
+			return result
    							
 def lightning(params, event):
 	allsky_lightning = ALLSKYLIGHTNING(params, event)
