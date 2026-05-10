@@ -17,7 +17,7 @@ class ALLSKYSCRIPT(ALLSKYMODULEBASE):
 		"name": "Run a Script",
 		"description": "Run a custom script",
 		"docs": "docs/allsky_modules/extra/run_script.html",  
-		"version": "v1.0.1",
+		"version": "v2.0.0",
 		"testable": "true", 
 		"events": [
 			"day",
@@ -36,7 +36,11 @@ class ALLSKYSCRIPT(ALLSKYMODULEBASE):
 			"scriptlocation" : {
 				"required": "true",
 				"description": "File Location",
-				"help": "The location of the script to run."
+				"help": "The location of the script to run.",
+				"type": {
+					"fieldtype": "commandfile"
+				}
+    
 			},
 			"shellnotice": {
 				"message": "<strong>NOTE</strong> Use this with extereme caution. If you are unsure of the implications do not select this option",
@@ -73,7 +77,14 @@ class ALLSKYSCRIPT(ALLSKYMODULEBASE):
 					"authorurl": "https://github.com/allskyteam",
 					"changes": "Updated to new module format"
 				}
-			]                                                
+			],
+			"v2.0.0" : [
+				{
+					"author": "Alex Greenland",
+					"authorurl": "https://github.com/allskyteam",
+					"changes": "Added file selector for script location and option to run with shell."
+				}
+			]                                               
 		}           
 	}
 
