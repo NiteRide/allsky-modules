@@ -4,6 +4,7 @@ from allsky_base import ALLSKYMODULEBASE
 import os
 import time
 import sys
+import csv
 import ephem
 import requests
 import math
@@ -12,12 +13,14 @@ import datetime as dt
 from math import radians
 from math import degrees
 from datetime import datetime, timedelta, date, timezone as dt_timezone
+from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 from dataclasses import dataclass
 
 from skyfield.api import EarthSatellite, load, wgs84, Loader, Topos
 from skyfield.api import N, S, E, W
 from skyfield import almanac
+from sgp4.exporter import export_tle
 from pytz import timezone
 
 from astral.sun import sun, azimuth, elevation, night
@@ -35,7 +38,7 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 		"description": "Obtain data for Solar System objects",
 		"docs": "docs/allsky_modules/extra/solar_system.html",  
 		"module": "allsky_solarsystem",
-		"version": "v1.1.0",
+			"version": "v1.1.1",
 		"testable": "true",
 		"centersettings": "false",
 		"group": "Data Capture",   
@@ -328,12 +331,14 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 			"planetJupiterEnabled": "false",
 			"planetSaturnEnabled": "false",
 			"planetUranusEnabled": "false",
-			"planetNeptuneEnabled": "false",
-			"planetPlutoEnabled": "false",
-			"planetElevation": "10",
-			"tles": "",
-			"sat_min_elevation": "10",
-			"issEnabled": "false",
+				"planetNeptuneEnabled": "false",
+				"planetPlutoEnabled": "false",
+				"planetElevation": "10",
+				"issCelestrakLegacyFormat": "false",
+				"satCelestrakLegacyFormat": "false",
+				"tles": "",
+				"sat_min_elevation": "10",
+				"issEnabled": "false",
 			"issPassDays": "5",
 			"issNumPass": "5",
 			"issVisibleOnly": "true",
@@ -373,7 +378,14 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					"min": -10,
 					"max": 90,
 					"step": 1
-				}           
+				},
+				"filters": {
+					"filter": "moonEnabled",
+					"filtertype": "show",
+					"values": [
+						"moonEnabled"
+					]
+				}            
 			},        
 			"sunEnabled": {
 				"required": "false",
@@ -460,14 +472,30 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					"step": 1
 				}           
 			},    
-			"issEnabled": {
-				"required": "false",
-				"description": "Enable ISS",
+				"issEnabled": {
+					"required": "false",
+					"description": "Enable ISS",
 				"tab": "ISS",
 				"type": {
-					"fieldtype": "checkbox"
-				}
-			},
+						"fieldtype": "checkbox"
+					}
+				},
+				"issCelestrakLegacyFormat": {
+					"required": "false",
+					"description": "Legacy TLE Format",
+					"help": "Off uses the new CelesTrak CSV GP data format. On uses the legacy three-line TLE format. DO NOT CHANGE Unless you are aware of the consequences",
+					"tab": "ISS",
+					"type": {
+						"fieldtype": "checkbox"
+					},
+					"filters": {
+						"filter": "issEnabled",
+						"filtertype": "show",
+						"values": [
+							"issEnabled"
+						]
+					}       
+				},
 			"issVisibleOnly": {
 				"required": "false",
 				"description": "Visible Only",
@@ -500,39 +528,48 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					]
 				}    
 			},
-			"issPassDays": {
-				"required": "false",
-				"description": "Pass days",
-				"help": "The number of days ahead to look for ISS passes over your location. 0 will disable the ISS pass calculations.",
-				"tab": "ISS",
-				"type": {
-					"fieldtype": "spinner",
-					"min": 0,
-					"max": 20,
-					"step": 1
+				"issPassDays": {
+					"required": "false",
+					"description": "Pass days",
+					"help": "The number of days ahead to look for ISS passes over your location. 0 will disable the ISS pass calculations.",
+					"tab": "ISS",
+					"type": {
+						"fieldtype": "spinner",
+						"min": 0,
+						"max": 20,
+						"step": 1
+					},
+					"layout": {
+						"title": "Passes",       
+						"row": "iss_pass_options",
+						"width": 6
+					},
+					"filters": {
+						"filter": "issEnabled",
+						"filtertype": "show",
+						"values": [
+							"issEnabled"
+						]
+					}               
 				},
-				"filters": {
-					"filter": "issEnabled",
-					"filtertype": "show",
-					"values": [
-						"issEnabled"
-					]
-				}               
-			},
-			"issNumPass": {
-				"required": "false",
-				"description": "Number Of Passes",
-				"help": "The number of passes to return when looking ahead. NOTE: the result may be less than this number",
-				"tab": "ISS",
-				"type": {
-					"fieldtype": "spinner",
-					"min": 0,
-					"max": 20,
-					"step": 1
-				},
-				"filters": {
-					"filter": "issEnabled",
-					"filtertype": "show",
+				"issNumPass": {
+					"required": "false",
+					"description": "Number Of Passes",
+					"help": "The number of passes to return when looking ahead. NOTE: the result may be less than this number",
+					"tab": "ISS",
+					"type": {
+						"fieldtype": "spinner",
+						"min": 0,
+						"max": 20,
+						"step": 1
+					},
+					"layout": {
+						"row": "iss_pass_options",
+						"width": 6
+					},
+					"filters": {
+						"filter": "issEnabled",
+						"filtertype": "show",
 					"values": [
 						"issEnabled"
 					]
@@ -549,6 +586,11 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					"max": 90,
 					"step": 1
 				},
+				"layout": {
+					"title": "Elevation",       
+					"row": "iss_ele_options",
+					"width": 6
+				},    
 				"filters": {
 					"filter": "issEnabled",
 					"filtertype": "show",
@@ -568,6 +610,10 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					"max": 90,
 					"step": 1
 				},
+				"layout": {
+					"row": "iss_ele_options",
+					"width": 6
+				},    
 				"filters": {
 					"filter": "issEnabled",
 					"filtertype": "show",
@@ -575,10 +621,19 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 						"issEnabled"
 					]
 				}               
-			},     
-			"tles": {
-				"required": "false",
-				"type": {
+				},     
+				"satCelestrakLegacyFormat": {
+					"required": "false",
+					"description": "Legacy TLE Format",
+					"help": "Off uses the new CelesTrak CSV GP data format. On appends FORMAT=TLE and uses the legacy three-line TLE format.",
+					"tab": "Satellites",
+					"type": {
+						"fieldtype": "checkbox"
+					}
+				},
+				"tles": {
+					"required": "false",
+					"type": {
 					"fieldtype": "satpicker"
 				},
 				"description": "Norad IDs",
@@ -629,19 +684,29 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 					"changes": "Updates for new variables system"
 				}
 			],
-			"v1.1.0" : [
-				{
-					"author": "Alex Greenland",
+				"v1.1.0" : [
+					{
+						"author": "Alex Greenland",
 					"authorurl": "https://github.com/allskyteam",
 					"changes": [
        			"Refactored satellite code",
 						"Split ISS into its own settings",
 						"Added passes overlay data to ISS"
-          ]
-				}
-			]       
+	          ]
+					}
+				],
+				"v1.1.1" : [
+					{
+						"author": "Alex Greenland",
+						"authorurl": "https://github.com/allskyteam",
+						"changes": [
+							"Added CelesTrak CSV GP data support",
+							"Added setting to use old TLE downloads"
+						]
+					}
+				]       
+			}
 		}
-	}
     
 	_overlay_folder = None
 	_overlay_tle_folder = None
@@ -937,13 +1002,143 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 			eType, eObject, eTraceback = sys.exc_info()
 			self.log(0, f"ERROR in {__file__}: _calculate_planets failed on line {eTraceback.tb_lineno} - {e}")
    
+	def _param_is_true(self, param, default=False):
+		try:
+			value = self.params[param]
+		except (ValueError, KeyError):
+			value = default
+
+		if isinstance(value, bool):
+			return value
+
+		if isinstance(value, str):
+			return value.strip().lower() in ['true', '1', 'yes', 'checked', 'on']
+
+		return bool(value)
+
+	def _get_celestrak_data_format(self, data_key):
+		if data_key == '25544' and 'issCelestrakLegacyFormat' in self.params:
+			return 'old' if self._param_is_true('issCelestrakLegacyFormat') else 'new'
+
+		if data_key != '25544' and 'satCelestrakLegacyFormat' in self.params:
+			return 'old' if self._param_is_true('satCelestrakLegacyFormat') else 'new'
+
+		# Backwards compatibility with the previous select-based setting.
+		celestrak_format = self.get_param('celestrakDataFormat', 'new', str, True).strip().lower()
+		if celestrak_format in ['old', 'tle', 'legacy']:
+			return 'old'
+
+		return 'new'
+
+	def _get_celestrak_request(self, data_key, data_format):
+		params = {}
+		if data_key[0].isdigit():
+			params['CATNR'] = data_key
+		else:
+			params['GROUP'] = data_key
+
+		if data_format == 'old':
+			params['FORMAT'] = 'TLE'
+
+		return 'https://celestrak.org/NORAD/elements/gp.php', params
+
+	def _format_file_age(self, file_age):
+		total_minutes = max(0, int(file_age * 24 * 60))
+		days = total_minutes // (24 * 60)
+		hours = (total_minutes % (24 * 60)) // 60
+		minutes = total_minutes % 60
+
+		def plural(value, unit):
+			return f'{value} {unit}' if value == 1 else f'{value} {unit}s'
+
+		if days > 0:
+			age_parts = [plural(days, 'day')]
+			if hours > 0:
+				age_parts.append(plural(hours, 'hour'))
+			return ' '.join(age_parts)
+
+		if hours > 0:
+			age_parts = [plural(hours, 'hour')]
+			if minutes > 0:
+				age_parts.append(plural(minutes, 'minute'))
+			return ' '.join(age_parts)
+
+		if minutes > 0:
+			return plural(minutes, 'minute')
+
+		return 'less than 1 minute'
+
+	def _write_celestrak_cache(self, data_filename, response_text):
+		umask = os.umask(0)
+		try:
+			with open(os.open(data_filename, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o777), 'w', encoding='utf-8') as outfile:
+				for line in response_text.splitlines():
+					if line.strip():
+						outfile.write(line.strip() + os.linesep)
+		finally:
+			os.umask(umask)
+
+	def _read_tle_file(self, data_filename):
+		tle_data = {}
+		counter = 0
+		with open(data_filename, encoding="utf-8") as file:
+			while True:
+				lines = [next(file, None) for _ in range(3)]
+				if not any(lines):
+					break
+
+				if lines[0] is None or lines[1] is None or lines[2] is None:
+					raise ValueError(f'Incomplete TLE data in {data_filename}')
+
+				if lines[0].strip():
+					tle_data[counter] = {
+						'line1': lines[0].rstrip('\r\n'),
+						'line2': lines[1].rstrip('\r\n'),
+						'line3': lines[2].rstrip('\r\n')
+					}
+					counter = counter + 1
+
+		return tle_data
+
+	def _normalise_omm_row(self, row):
+		normalised_row = {}
+		for key, value in row.items():
+			if key is not None:
+				normalised_row[key.strip()] = value.strip() if value is not None else ''
+
+		epoch = normalised_row.get('EPOCH', '')
+		if epoch.endswith('Z'):
+			epoch = epoch[:-1]
+		if epoch and '.' not in epoch:
+			epoch = epoch + '.000000'
+		normalised_row['EPOCH'] = epoch
+
+		return normalised_row
+
+	def _read_omm_csv_file_as_tle(self, data_filename):
+		tle_data = {}
+		with open(data_filename, newline='', encoding="utf-8") as file:
+			for counter, row in enumerate(csv.DictReader(file)):
+				normalised_row = self._normalise_omm_row(row)
+				sat = EarthSatellite.from_omm(self._ts, normalised_row)
+				line2, line3 = export_tle(sat.model)
+				tle_data[counter] = {
+					'line1': sat.name if sat.name else normalised_row.get('OBJECT_NAME', ''),
+					'line2': line2,
+					'line3': line3
+				}
+
+		return tle_data
+
 	def _fetch_tle_from_celestrak(self, data_key, verify=True):
 		tle_data = {}
 		try:
 		
 			self.log(4, f'INFO: Loading Satellite {data_key}', True)
 
-			data_filename = os.path.join(self._overlay_tle_folder , data_key + '.tle')
+			data_format = self._get_celestrak_data_format(data_key)
+			data_extension = 'tle' if data_format == 'old' else 'csv'
+			data_filename = os.path.join(self._overlay_tle_folder , f'{data_key}.{data_extension}')
 			allsky_shared.createTempDir(self._overlay_tle_folder)
 
 			if os.path.exists(data_filename):
@@ -954,63 +1149,24 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 				file_age = 9999
 
 			if file_age > 2:
-				if data_key[0].isdigit():
-					response = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?CATNR={data_key}', timeout=5)
-					response.raise_for_status()
+				url, params = self._get_celestrak_request(data_key, data_format)
+				timeout = 5 if data_key[0].isdigit() else 10
+				response = requests.get(url, params=params, timeout=timeout)
+				response.raise_for_status()
 
-					if response.text == 'No GP data found':
-						raise LookupError
+				if response.text.strip() == 'No GP data found':
+					raise LookupError(f'No CelesTrak GP data found for {data_key}')
 
-					tle_data = response.text.split('\r\n')
+				self._write_celestrak_cache(data_filename, response.text)
+				self.log(4, f'INFO: {data_key} file over 2 days old so downloaded')
 
-					umask = os.umask(0)
-					with open(os.open(data_filename, os.O_CREAT | os.O_WRONLY, 0o777), 'w', encoding='utf-8') as outfile:
-						outfile.write(tle_data[0].strip() + os.linesep)
-						outfile.write(tle_data[1].strip() + os.linesep)
-						outfile.write(tle_data[2].strip() + os.linesep)
-					os.umask(umask)
-				else:
-
-					url = f'https://celestrak.org/NORAD/elements/gp.php?GROUP={data_key}&FORMAT=tle'
-					try:
-						response = requests.get(url, timeout=10)
-						if response.status_code == 200:
-							tle_data = response.content.decode('utf-8').split('\r\n')
-
-						with open(os.open(data_filename, os.O_CREAT | os.O_WRONLY, 0o777), 'w', encoding='utf-8') as outfile:
-							for line in tle_data:
-								outfile.write(line.strip() + os.linesep)
-					except Exception as data_exception:
-						exception_type, exception_object, exception_traceback = sys.exc_info()
-						result = f'ERROR: Failed to retrieve data from {url} - {exception_traceback.tb_lineno} - {data_exception}'
-
-				self.log(4, ' TLE file over 2 days old so downloaded')
-
-			tle_data = {}
-			if data_key[0].isdigit():
-				with open(data_filename, encoding="utf-8") as file:
-					lines = [next(file, None) for _ in range(3)]
-					tle_data[0] = {
-						'line1': lines[0].replace(os.linesep,''),
-						'line2': lines[1].replace(os.linesep,''),
-						'line3': lines[2].replace(os.linesep,'')
-					}
+			if data_format == 'old':
+				tle_data = self._read_tle_file(data_filename)
 			else:
-				counter = 0
-				with open(data_filename, encoding="utf-8") as file:
-					while True:
-						lines = [next(file, None) for _ in range(3)]
-						if not any(lines):
-							break
+				tle_data = self._read_omm_csv_file_as_tle(data_filename)
 
-						if lines[0] != os.linesep and lines[0] is not None:
-							tle_data[counter] = {
-								'line1': lines[0].replace(os.linesep,''),
-								'line2': lines[1].replace(os.linesep,''),
-								'line3': lines[2].replace(os.linesep,'')
-							}
-						counter = counter + 1
-				self.log(4, ' TLE loaded from cache')
+				if file_age <= 2:
+					self.log(4, f'INFO: {data_key} loaded from cache, elements are {self._format_file_age(file_age)} old')
 		except Exception as e:
 			eType, eObject, eTraceback = sys.exc_info()
 			self.log(0, f"ERROR in {__file__}: _fetch_tle_from_celestrak failed on line {eTraceback.tb_lineno} - {e}")
@@ -1420,4 +1576,3 @@ def solarsystem_cleanup():
 	    }
 	}
 	allsky_shared.cleanupModule(moduleData)
-
