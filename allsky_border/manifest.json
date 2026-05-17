@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "module": "allsky_border",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "dbdc1c3823ab2af88ef26c423f7f40424270465c87b876d7d88eb6e27bad33cd",
+      "size": 1234,
+      "mode": "644"
+    },
+    "allsky_border.py": {
+      "sha256": "d51fe08144a42f918b3fbb24dc474193811db0fd3256c01c6d06cf91f1620095",
+      "size": 3736,
+      "mode": "755"
+    }
+  },
+  "file_count": 2
+}

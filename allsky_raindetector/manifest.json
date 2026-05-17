@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module": "allsky_raindetector",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "af8bcba9e71cd1599829637bd862204bf05a94b52e77facb13d9775f2c2e0a24",
+      "size": 950,
+      "mode": "644"
+    },
+    "allsky_raindetector.py": {
+      "sha256": "fda6001ecb27f8faa039a9a91fe4290ae9197369ac16b4a0ef3720a6b864e9f6",
+      "size": 13700,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "74f5b003e65cf13144cd84010f0315fe3ff307aaad0ab7dd9374b6b7778828b0",
+      "size": 20,
+      "mode": "644"
+    }
+  },
+  "file_count": 3
+}

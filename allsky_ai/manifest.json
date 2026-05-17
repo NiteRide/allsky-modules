@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module": "allsky_ai",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "318db4ed7846382a93d2c3c809939510297643acd8a5cf7edf02c26b2b3ab919",
+      "size": 1986,
+      "mode": "644"
+    },
+    "allsky_ai.py": {
+      "sha256": "03f146c7436f7ae26aeb837c8f181c3285fd4dcf1cd8cc196c2fd2ae9ca80e89",
+      "size": 2007,
+      "mode": "755"
+    },
+    "requirements.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "mode": "644"
+    }
+  },
+  "file_count": 3
+}

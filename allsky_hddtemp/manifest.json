@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "module": "allsky_hddtemp",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_hddtemp.py": {
+      "sha256": "26714c1fa4616a691943d78bce86e57eec093fb4641f9721d1a741f6249ac2b8",
+      "size": 10555,
+      "mode": "755"
+    },
+    "db/db_data.json": {
+      "sha256": "dec7181fdcb234fadf8f093e1b3835a6537a9a868413832f200172efa71b645b",
+      "size": 146,
+      "mode": "644"
+    },
+    "packages.txt": {
+      "sha256": "61bfeb2957d080cbab70b332f16b482e1991b08e77ea7a8546b68b3cde90990c",
+      "size": 13,
+      "mode": "644"
+    },
+    "readme.txt": {
+      "sha256": "6c9a7c2615233ae39e97838847ac2d5e214c695184c526ad2aa36a125a47f3ab",
+      "size": 746,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "d32dbe05d776fccbd1843074aa971a343f87434f5f76b7fc06fd7a230561fcec",
+      "size": 7,
+      "mode": "644"
+    }
+  },
+  "file_count": 5
+}

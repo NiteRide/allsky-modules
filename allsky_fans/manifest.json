@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "module": "allsky_fans",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "28f45f8120230ed846e3602092a277709086a28e371e591a490fbd0287fe568b",
+      "size": 5403,
+      "mode": "644"
+    },
+    "allsky_fans.py": {
+      "sha256": "dcb315d9449e02786f26df48b2d48f2b509f959bdf68c14862fea995299e100a",
+      "size": 22529,
+      "mode": "755"
+    },
+    "blocks/fan1.json": {
+      "sha256": "c6699e1632af8b02fa57189cb6d244db02b448f60fc5a5d6ee2e31f15f345923",
+      "size": 567,
+      "mode": "644"
+    },
+    "charts/fan1_pwm_guage.json": {
+      "sha256": "02806540e6f8d54cd9cdefac646fcbbca5d60b61700821bf9d8e5a4e27540616",
+      "size": 264,
+      "mode": "755"
+    },
+    "charts/fan1_yesno.json": {
+      "sha256": "07b6a9aacab5ae990167e3248e7e5f6a497180773580819ec5c69699418ca628",
+      "size": 484,
+      "mode": "644"
+    },
+    "charts/fan2_pwm_guage.json": {
+      "sha256": "e122a656c2d8760609314b8bcc6f169bcda3b5966997d023a3623908256051df",
+      "size": 264,
+      "mode": "755"
+    },
+    "charts/fan2_yesno.json": {
+      "sha256": "12df065b151cac8ac86e76a788ccdde07b4e95c3666ca257f17a1540768d9358",
+      "size": 484,
+      "mode": "644"
+    },
+    "charts/fan_speed_chart.json": {
+      "sha256": "9b2c5607630ac256eae26e6e812088728d87a040a11eb5ba5b773a4e44fdab12",
+      "size": 555,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "0c7587e65ae961335012278b67abfbc450308d222e2cb73cd22e4b2303888006",
+      "size": 143,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "ca245da86c1791a3e834bb926caaa2fa21da15cbcd267e42aa25245446a11118",
+      "size": 289,
+      "mode": "644"
+    }
+  },
+  "file_count": 10
+}

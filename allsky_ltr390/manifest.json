@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "module": "allsky_ltr390",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_ltr390.py": {
+      "sha256": "a3d680534c2d8ae5ffcf77f02a1b662a5f0f5069373d6ded2d452a892ecb0d59",
+      "size": 1509,
+      "mode": "755"
+    },
+    "requirements.txt": {
+      "sha256": "48062db349cb02534b599e47d7068841d30a5aa9d9d480e94d734e19a3f42eef",
+      "size": 29,
+      "mode": "644"
+    }
+  },
+  "file_count": 2
+}

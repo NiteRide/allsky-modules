@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module": "allsky_ina3221",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "e196843652764c195dc68d3b7a86aa2ba687eb1e55da3485b159545adb7101ff",
+      "size": 398,
+      "mode": "644"
+    },
+    "allsky_ina3221.py": {
+      "sha256": "fe64d3c1c39ecd2f6532ba69b5d3e1e2f14a09b322d79b82fee958103dd529a7",
+      "size": 1156,
+      "mode": "755"
+    },
+    "requirements,txt": {
+      "sha256": "1e8c758122ced81e07546ff6a1128bb041770e886c12635a8c4dc492fa359781",
+      "size": 30,
+      "mode": "644"
+    }
+  },
+  "file_count": 3
+}

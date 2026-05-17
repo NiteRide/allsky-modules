@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "module": "allsky_dewheater",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_dewheater.py": {
+      "sha256": "6af72275583813344031f8210de3067f0f68bf84788ee7e449658bb5262bc953",
+      "size": 61319,
+      "mode": "755"
+    },
+    "blocks/dew1.json": {
+      "sha256": "d2f82daba204cb37951551d752542f4b9c342ff5d5dc233ff2f186fb5e61e448",
+      "size": 985,
+      "mode": "644"
+    },
+    "charts/dewheater_chart.json": {
+      "sha256": "6fe93a0bc08a939438e89b1fcd74a586b5fb1a58cedc58c61ae5a6116cd89888",
+      "size": 689,
+      "mode": "644"
+    },
+    "charts/dewheater_pwm_guage.json": {
+      "sha256": "4673060e4e126e434b05952626d720fd4662cd9bd35db76ba6fe8d3d95f01099",
+      "size": 272,
+      "mode": "755"
+    },
+    "charts/dewheater_state_chart.json": {
+      "sha256": "79618ee0e595150b1735b5907d5ce832dbe8f6db5c7cd39e886eeb460b879df4",
+      "size": 408,
+      "mode": "644"
+    },
+    "charts/dewheater_yesno.json": {
+      "sha256": "823f07c4892ae493fa30ffa4ba21bc1e67ae188efcb95a3c5c6ca24de569ec38",
+      "size": 499,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "93977f555a554d3d7e25baa6f0c476a8889582a23b53904cae26017468df48dc",
+      "size": 148,
+      "mode": "644"
+    },
+    "readme.txt": {
+      "sha256": "86d84743c604542124afd8a627be904842f060911a13a438f45c323a5d3cea5d",
+      "size": 1340,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "7adc7c7f20ffbcf5bbbcd6950cb06ef7b5761a8a1858e8233f6e1339b3c67a13",
+      "size": 222,
+      "mode": "755"
+    }
+  },
+  "file_count": 9
+}

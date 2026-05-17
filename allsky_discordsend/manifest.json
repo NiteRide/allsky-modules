@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module": "allsky_discordsend",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "6ba6f8bd201a7865e4be4a661f5c2d648cd17613e399a761cd8db9e362a3bc40",
+      "size": 1902,
+      "mode": "755"
+    },
+    "allsky_discordsend.py": {
+      "sha256": "53af4dea6a4acf82668914c5ca0a13bbb9314a1fce16aee621eb23b6c8bd5db3",
+      "size": 10260,
+      "mode": "755"
+    },
+    "requirements.txt": {
+      "sha256": "37c917c66955daacbb3d4469a11e7b0ed54ee237cd28be3dedfd788aef09d4f5",
+      "size": 10,
+      "mode": "755"
+    }
+  },
+  "file_count": 3
+}

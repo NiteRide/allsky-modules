@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "module": "allsky_localai",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_localai.py": {
+      "sha256": "455d804f8acf12a5d2f401e173727f28b9efa0a5db1959fc48876b7676a19814",
+      "size": 9277,
+      "mode": "644"
+    }
+  },
+  "file_count": 1
+}

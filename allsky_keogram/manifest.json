@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "module": "allsky_keogram",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_keogram.py": {
+      "sha256": "04e9171acf8991bff8818ec0f6b282b2ecc587a8063465734a064c10d7e710e2",
+      "size": 14591,
+      "mode": "644"
+    }
+  },
+  "file_count": 1
+}

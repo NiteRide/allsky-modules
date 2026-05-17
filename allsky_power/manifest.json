@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "module": "allsky_power",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_power.py": {
+      "sha256": "985620a877e46058aa7b96d1481448383db14ae5a31a25e72e907f0c89498d02",
+      "size": 15617,
+      "mode": "755"
+    },
+    "blocks/channel1.json": {
+      "sha256": "90c0aac60f741b497477248c64417e67cb079c2ea73ffdcd3a36e399fd5ed9b6",
+      "size": 787,
+      "mode": "644"
+    },
+    "charts/power_chart.json": {
+      "sha256": "546ae86382dea0cff6c7c2f1399510e4b16c12d562abca0c18f2a7f331c2bfb0",
+      "size": 650,
+      "mode": "644"
+    },
+    "charts/power_v_c_chart.json": {
+      "sha256": "6d4a77ccf25b5baf51356ccee902a2404034a218165a5874774cfaa6a62b87df",
+      "size": 1172,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "a50a17856ab80f37f74ee08907e969237501b8e8df8ba752dba44b42d07413ca",
+      "size": 144,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "aa3f786d628df043d7bd77f187b14784385465912e25b81896686bf9c075a0b8",
+      "size": 91,
+      "mode": "644"
+    }
+  },
+  "file_count": 6
+}

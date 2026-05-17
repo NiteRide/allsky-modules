@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "module": "allsky_solarsystem",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "018441d54de184e1e9faf901fc28dc6543b8799abc6891edbeec2f6130bccd90",
+      "size": 3653,
+      "mode": "644"
+    },
+    "allsky_solarsystem.py": {
+      "sha256": "5694635e767e1ecfbe646fe68ac347c7b555160b3c102577b3c138e00813d2f0",
+      "size": 47186,
+      "mode": "755"
+    },
+    "allsky_spaceweather.py": {
+      "sha256": "72cd0ce60589f4a75ac1953549c1199e24a280eedaa9bc19792d75013c5f3681",
+      "size": 12041,
+      "mode": "644"
+    },
+    "blocks/iss.json": {
+      "sha256": "7883ca97a53c97ab5e161ddb10023367328f69dab0d852eef75f89b193cf78f2",
+      "size": 1459,
+      "mode": "644"
+    },
+    "blocks/isspasses.json": {
+      "sha256": "1303d02f2e67452a989d344d243dbe6cf99125d75f391d4cb865567dacb58632",
+      "size": 2669,
+      "mode": "644"
+    },
+    "blocks/moon.json": {
+      "sha256": "8f5571bcbb44717a6945cdc82d35f31098a174c1c16ce018b1017e9ad5427bda",
+      "size": 2250,
+      "mode": "644"
+    },
+    "blocks/planets.json": {
+      "sha256": "11b343f9b440fc6bfd6ec0f98166d5dbdde11062bc728d486e90b1c86b6a12bb",
+      "size": 3817,
+      "mode": "644"
+    },
+    "blocks/sun.json": {
+      "sha256": "6ac92a68bc6220d3a8889e4abec308dc5cc94f89de338d85a7c5b6a6b16a7cda",
+      "size": 1778,
+      "mode": "644"
+    },
+    "charts/moon_illumination_guage.json": {
+      "sha256": "223e2c79ba11dc328ed3fc9a9c64b77274b0cae6a4ad699bf4391ea256666a8e",
+      "size": 282,
+      "mode": "755"
+    },
+    "charts/moon_position_chart.json": {
+      "sha256": "3d23fa235a20eb357089d05056951af11f95d3e1bc40f13f8b250b556a6b5ea0",
+      "size": 668,
+      "mode": "644"
+    },
+    "charts/moon_yesno.json": {
+      "sha256": "1f70c908c27ff07e4468b174aa993139a357515509eb7ca688720609cce9b94b",
+      "size": 483,
+      "mode": "755"
+    },
+    "requirements.txt": {
+      "sha256": "518a0d4c9c698e335a2b4adc5399bcb4c407efc077ecda4ec640b5c85d287b44",
+      "size": 8,
+      "mode": "644"
+    }
+  },
+  "file_count": 12
+}

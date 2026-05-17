@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "module": "allsky_example3",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_example3.py": {
+      "sha256": "3d9753029fbdcad088da677a200e7fd53c69bdcd98f7567f9901faceee73bfa4",
+      "size": 5475,
+      "mode": "644"
+    }
+  },
+  "file_count": 1
+}

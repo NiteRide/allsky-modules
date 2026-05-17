@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "module": "allsky_rain",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "ba856900cd9e084292a7654f309f47570ce341b921df7d9c9b515f4449698ff9",
+      "size": 1035,
+      "mode": "755"
+    },
+    "allsky_rain.py": {
+      "sha256": "1c8e1d92dc169078824d0c33ffd6642959f6a53deeadaabe649eb70ccaf1f828",
+      "size": 5006,
+      "mode": "755"
+    },
+    "charts/rain_chart.json": {
+      "sha256": "a727b39be10dae7607418b9c5f859cec7d05fa425c83fefac6da41f367fb0547",
+      "size": 413,
+      "mode": "644"
+    },
+    "charts/rain_yesno.json": {
+      "sha256": "0958aa3ec88bfcecfe16f9ffa4cd635ae590afdfe17cc03848c0071bd0de2b67",
+      "size": 497,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "ae2c0aca90ee0f4f4e61bb069e3862eba4c33955a45f074bf3b55c7d3bceb963",
+      "size": 143,
+      "mode": "644"
+    }
+  },
+  "file_count": 5
+}

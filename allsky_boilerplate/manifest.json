@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "module": "allsky_boilerplate",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_boilerplate.py": {
+      "sha256": "61d9d6a2c7f156d9367cb3c192639760f9a04c056be1bdd11c9d404081dc1e8b",
+      "size": 9678,
+      "mode": "755"
+    }
+  },
+  "file_count": 1
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "module": "allsky_light",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_light.py": {
+      "sha256": "8016781e396ff2f621055587aa91ceb0d83190a526a91aa9444a6bc9fcf57d5c",
+      "size": 13863,
+      "mode": "755"
+    },
+    "charts/light_bortle_guage.json": {
+      "sha256": "79a86489353ec40c91387be64abb1f17c2afa3ffd4e2cf44465d723210daaef4",
+      "size": 1632,
+      "mode": "644"
+    },
+    "charts/light_lux_chart.json": {
+      "sha256": "6d7b70f6c985dd3283cd2631852c864a25db666f9476cc668bffd16c1aaee3c1",
+      "size": 315,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "26e053f4f9ec1cfd87c054c84780bbe581fe328db934c1856285ee1d4b307a69",
+      "size": 144,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "9829c48bc245121681aed41149f5769fffca9d0906a83f96102712bf8fff702c",
+      "size": 92,
+      "mode": "644"
+    }
+  },
+  "file_count": 5
+}

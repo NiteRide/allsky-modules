@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "module": "allsky_adsb",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "2baaf15511da077744a7327697c77e33805489d3eceb4f1f91907bb34c0fdb3c",
+      "size": 7259,
+      "mode": "644"
+    },
+    "allsky_adsb.py": {
+      "sha256": "bf39ee3b2bd5b12c92b0a8afeefadada84f0e49d9f3c90d844245798af63e575",
+      "size": 36004,
+      "mode": "755"
+    },
+    "allsky_adsb/adsb_data/.readme": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "mode": "644"
+    },
+    "allsky_adsb/tools/build_database.py": {
+      "sha256": "64b221fc9a0887519e5f94e77908b0fa56ccf9e3169294649252887d609dd9a0",
+      "size": 3618,
+      "mode": "755"
+    },
+    "blocks/aircraft1.json": {
+      "sha256": "01425ccbb7f193e7442758762d00ca7413417f1b119a469fe4a843b06baf165c",
+      "size": 2119,
+      "mode": "644"
+    },
+    "blocks/aircraft2.json": {
+      "sha256": "08ecd0046cdf6a2c120b57834f8c14457e009daa0e3b4d643044d8adb304eb45",
+      "size": 2119,
+      "mode": "644"
+    },
+    "blocks/aircraft3.json": {
+      "sha256": "2a463122c3f89ed437db074c55c917b62b41bf84442f3ae8675bf6cb858e67bb",
+      "size": 2119,
+      "mode": "644"
+    },
+    "blocks/aircraft4.json": {
+      "sha256": "5d8c8001b9cf24a3f785f1d7c643aa20381db7e89423dfe22660054b06f09cd0",
+      "size": 2119,
+      "mode": "644"
+    },
+    "blocks/aircraft5.json": {
+      "sha256": "99b44ac7acad2a0fe6a58781fd36c59162bef97e117831a174aca4b4856242aa",
+      "size": 2119,
+      "mode": "644"
+    },
+    "blocks/closest.json": {
+      "sha256": "3879d44749e45cfe396550fdb81fd030cf0c782eca1240c80c6cc814741fdeb3",
+      "size": 429,
+      "mode": "644"
+    },
+    "blocks/top5.json": {
+      "sha256": "4d91d164951e22ddbbce2ecd7f0cfd181b4190a5f409cc41cd7837dfaf538d7a",
+      "size": 1821,
+      "mode": "644"
+    },
+    "charts/total_aircraft_chart.json": {
+      "sha256": "3d096efbf0df14d9b4a6c77dbae43238bc2f116e226404cecf2fdfda2befe70f",
+      "size": 393,
+      "mode": "755"
+    },
+    "charts/total_aircraft_gauge.json": {
+      "sha256": "4e0a64aa9497861f45a82fd7bce0198ddf7d7897bca4d4392cbde2668544a94a",
+      "size": 1645,
+      "mode": "755"
+    },
+    "db/db_data.json": {
+      "sha256": "b3b88bb0ec25110d1caadd99d42d47ce3cb11cffd9ec40c17f48a527fdbce2da",
+      "size": 143,
+      "mode": "644"
+    },
+    "installer.json": {
+      "sha256": "c7423e6cc0b61a854e1ded99280fc9393c4c09b6935cf62dd2fa24e327bae333",
+      "size": 166,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "cd4873553526e34d7a3cb054b802cf50edab4e13fdab39f88c40c10b4853d7b1",
+      "size": 9,
+      "mode": "644"
+    }
+  },
+  "file_count": 16
+}

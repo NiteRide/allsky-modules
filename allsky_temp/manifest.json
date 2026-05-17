@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "module": "allsky_temp",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_temp.py": {
+      "sha256": "9a91b22b86703cc9d9c8504ea900b150c6f9ecfbb5794431e599b39055dd74f9",
+      "size": 93824,
+      "mode": "755"
+    },
+    "blocks/allskyenv.json": {
+      "sha256": "938f2e737b1b5bcdd49813c8fb78103b9df433b0a9845579147c25503466e265",
+      "size": 791,
+      "mode": "644"
+    },
+    "charts/core_temp.chart.json": {
+      "sha256": "8adbabd45b71454ef8300ad2665b052814e9eadf9bf1a288dd26928ea4ff26b3",
+      "size": 772,
+      "mode": "644"
+    },
+    "charts/sensor1_temp.chart.json": {
+      "sha256": "87d69775b016162ae8abeb88d74c9c9a5393e1599061d2c2f72a2bc179ee5918",
+      "size": 779,
+      "mode": "644"
+    },
+    "charts/sensor2_temp.chart.json": {
+      "sha256": "c0bcaa8819bafbca9137b2c62798d960b68e766d7b4d18c1e78297aaddfa98b5",
+      "size": 779,
+      "mode": "644"
+    },
+    "charts/sensor3_temp.chart.json": {
+      "sha256": "0f04e6c71b1cf7f8ade897de4bf10813d22e55cb5875ca91ea70d71447bbe409",
+      "size": 779,
+      "mode": "644"
+    },
+    "db/db_data.json": {
+      "sha256": "a83af6216fb9c658b592db9d92141e75c95d706d69668bc360a96b0e9dbf05c3",
+      "size": 143,
+      "mode": "644"
+    },
+    "readme.txt": {
+      "sha256": "9914b4e36ac22196db84c703449bfa6369e0f55cbc4bccabb8c078b2d8ec7cfb",
+      "size": 4828,
+      "mode": "644"
+    },
+    "requirements.txt": {
+      "sha256": "ceb8323ca7396c164793bffcbbf0ac49dda8ee3f3d57019a73b5437a26bb9a4b",
+      "size": 288,
+      "mode": "755"
+    }
+  },
+  "file_count": 9
+}

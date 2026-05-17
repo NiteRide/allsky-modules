@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "module": "allsky_telescopemarker",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "165_parked_fisheye_image.jpg": {
+      "sha256": "59bc8bb1f02e9d704cfe94c076a29f0959218d3bf8a591dd71c19c39f3a438c1",
+      "size": 69635,
+      "mode": "644"
+    },
+    "README.md": {
+      "sha256": "e0ca65d16162f4f9db505918c634bf23e6278209e669759e21b78c658c4a2ef9",
+      "size": 1454,
+      "mode": "644"
+    },
+    "allsky_telescopemarker.py": {
+      "sha256": "753e4be652e228e42a12741c2bdd3bb9a87f14d145f1472f9dd6ae5f7cf1af18",
+      "size": 9660,
+      "mode": "755"
+    },
+    "requirements.txt": {
+      "sha256": "ae0243a6be104b4e214913e4d0170ca5cfcac3772377c5486fae84cd8a61173d",
+      "size": 13,
+      "mode": "644"
+    }
+  },
+  "file_count": 4
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "module": "allsky_jsonimport",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "acee8f90cec4d7384fd92f63b8b0b7b3e065b25ff8182f0ee8bfa6ade286bc7e",
+      "size": 1164,
+      "mode": "644"
+    },
+    "allsky_jsonimport.py": {
+      "sha256": "5b6646ea6f0e04d12aa458a1d7a7ec1ccc2c49d4ce69c9ddabf66e5e1a403b3a",
+      "size": 3719,
+      "mode": "755"
+    }
+  },
+  "file_count": 2
+}

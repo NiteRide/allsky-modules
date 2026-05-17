@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "module": "allsky_pigps",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_pigps.py": {
+      "sha256": "95718d39710482d8989b1792e922ee57f9bf67d3292c0c2615a59ed09cb0e9ae",
+      "size": 12915,
+      "mode": "755"
+    },
+    "charts/pigps_chart.json": {
+      "sha256": "519df96f9f9a95083e117f4beee34d9547aff2cf8a93c62a56f5eb9de81a9b45",
+      "size": 397,
+      "mode": "755"
+    },
+    "charts/pigps_yesno.json": {
+      "sha256": "37d3ac54e6027415e6bff75376e96f46255530df3fadd6e3abefad7dffd1ccb9",
+      "size": 448,
+      "mode": "755"
+    },
+    "db/db_data.json": {
+      "sha256": "479ec6d20e2469c5926a9fa7be768d641f4f5125cd887981e58775b69d894afe",
+      "size": 142,
+      "mode": "644"
+    },
+    "packages.txt": {
+      "sha256": "1b465630a4420f1b47bf340894a005456b1a1a722239601dd64c87f43178357f",
+      "size": 18,
+      "mode": "755"
+    }
+  },
+  "file_count": 5
+}

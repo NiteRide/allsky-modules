@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "module": "allsky_esp32round",
+  "generated_utc": "2026-05-17T19:48:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "allsky_esp32round.py": {
+      "sha256": "e63c900988192bc4ffebc1f4b90f7ce62396df44c086516d3498a8784e064cca",
+      "size": 7105,
+      "mode": "644"
+    }
+  },
+  "file_count": 1
+}
