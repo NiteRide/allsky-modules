@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "module": "allsky_script",
+  "generated_utc": "2026-05-17T19:46:31Z",
+  "hash_algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "c6fa96234fef4bc3ee4c0f27216037e3e7dc22c76511402f1ef4d59043f94338",
+      "size": 529,
+      "mode": "755"
+    },
+    "allsky_script.py": {
+      "sha256": "cc22cdc4eb0c4dda95fd509e36ffdfee5a81b1cdf6f971ae8b801be918e845a6",
+      "size": 2843,
+      "mode": "755"
+    }
+  },
+  "file_count": 2
+}
