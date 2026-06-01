@@ -39,7 +39,7 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 		"description": "Obtain data for Solar System objects",
 		"docs": "docs/allsky_modules/extra/solar_system.html",  
 		"module": "allsky_solarsystem",
-			"version": "v1.1.1",
+			"version": "v1.1.2",
 		"testable": "true",
 		"centersettings": "false",
 		"group": "Data Capture",   
@@ -705,7 +705,14 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 							"Added setting to use old TLE downloads"
 						]
 					}
-				]       
+				],
+				"v1.1.2" : [
+					{
+						"author": "Alex Greenland",
+						"authorurl": "https://github.com/allskyteam",
+						"changes": "Switch Moon to use Astral"
+					}
+				]          
 			}
 		}
     
