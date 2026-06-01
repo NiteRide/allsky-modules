@@ -24,6 +24,7 @@ from sgp4.exporter import export_tle
 from pytz import timezone
 
 from astral.sun import sun, azimuth, elevation, night
+from astral.moon import moonrise as astral_moonrise, moonset as astral_moonset
 from astral import LocationInfo, Observer
 
 try:
@@ -770,24 +771,44 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 	def _convert_ephem_date(self, ephem_date):
 		date_tuple = ephem_date.tuple()
 
-		date_timestamp = datetime(date_tuple[0], date_tuple[1], date_tuple[2], date_tuple[3], date_tuple[4], int(date_tuple[5]))
-		return date_timestamp
+		date_timestamp = datetime(date_tuple[0], date_tuple[1], date_tuple[2], date_tuple[3], date_tuple[4], int(date_tuple[5]), tzinfo=dt_timezone.utc)
+		return date_timestamp.astimezone(getattr(self, '_tz', dt_timezone.utc))
+
+	def _getAstralMoonTime(self, moon_time_func, location, now, direction):
+		search_range = range(0, -16, -1) if direction == 'previous' else range(0, 16)
+
+		for offset in search_range:
+			event_date = (now + timedelta(days=offset)).date()
+			try:
+				event_time = moon_time_func(location, date=event_date, tzinfo=self._tz)
+			except ValueError:
+				continue
+
+			if event_time is None:
+				continue
+
+			if direction == 'previous' and event_time <= now:
+				return event_time
+
+			if direction == 'next' and event_time >= now:
+				return event_time
+
+		raise ValueError(f'Unable to find {direction} {moon_time_func.__name__} within 15 days')
 
 	def _calculateMoon(self):
 		try:
 			if self._enable_skyfield:
-				lat = radians(allsky_shared.convertLatLon(self._observer_lat))
-				lon = radians(allsky_shared.convertLatLon(self._observer_lon))
-
-				now = time.time()
-				utc_offset = (datetime.fromtimestamp(now) - datetime.utcfromtimestamp(now)).total_seconds()
+				lat = allsky_shared.convertLatLon(self._observer_lat)
+				lon = allsky_shared.convertLatLon(self._observer_lon)
+				location = Observer(lat, lon, self._observer_elevation)
+				now = datetime.now(self._tz)
 
 				observer = ephem.Observer()
-				observer.lat = lat
-				observer.long = lon
+				observer.lat = radians(lat)
+				observer.long = radians(lon)
 				observer.elevation = self._observer_elevation
 				moon = ephem.Moon()
-				obs_date = datetime.now() - timedelta(seconds=utc_offset)
+				obs_date = datetime.now(dt_timezone.utc).replace(tzinfo=None)
 				observer.date = obs_date
 				moon.compute(observer)
 
@@ -811,13 +832,11 @@ class ALLSKYSOLARSYSTEM(ALLSKYMODULEBASE):
 				moon_phase_symbol = symbol
 
 				if moon.alt > 0:
-					moon_rise = observer.previous_rising(moon)
+					moon_rise_timestamp = self._getAstralMoonTime(astral_moonrise, location, now, 'previous')
 				else:
-					moon_rise = observer.next_rising(moon)
+					moon_rise_timestamp = self._getAstralMoonTime(astral_moonrise, location, now, 'next')
 
-				moon_rise_timestamp = self._convert_ephem_date(moon_rise)
-				moon_set = observer.next_setting(moon)
-				moon_set_timestamp = self._convert_ephem_date(moon_set)
+				moon_set_timestamp = self._getAstralMoonTime(astral_moonset, location, now, 'next')
 
 				next_full_moon = ephem.next_full_moon(observer.date)
 				next_new_moon = ephem.next_new_moon(observer.date)
