@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+echo
+read -rp "Create/update module manifest files before committing? [y/N]: " RESPONSE
+
+case "$RESPONSE" in
+    [yY]|[yY][eE][sS])
+        echo "Creating manifest files..."
+        ./tools/create-module-manifest.sh all
+
+        echo "Adding updated manifest files..."
+        find . -type f -path '*/allsky_*/manifest.json' -exec git add {} +
+
+        echo "Manifest files updated and staged."
+        ;;
+    *)
+        echo "Skipping manifest creation."
+        ;;
+esac
+
+exit 0

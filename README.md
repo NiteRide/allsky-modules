@@ -22,8 +22,10 @@ When you are done installing the modules you want and have verified they work co
 
 `cd; rm -fr allsky-modules`
 
+### If you are committing changes
+```git config core.hooksPath .githook```
 
-### Moving around the menu
+s### Moving around the menu
 Use the up and down arrow keys to move the highlighted selection between the options available. Pressing the right arrow key will jump out of the options menu and take you to the `<Ok>` and `<Finish>` buttons. Pressing left will take you back to the options. Alternatively, use the Tab key to switch between these.
 
 When a list is displayed the `<space>` bar can be used to select or unselect an option.
