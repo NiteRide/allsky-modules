@@ -31,6 +31,7 @@ Use the up and down arrow keys to move the highlighted selection between the opt
 When a list is displayed the `<space>` bar can be used to select or unselect an option.
 
 
+
 ### Module Installer Main Menu
 
  ![Main Menu](/images/menu.png)
