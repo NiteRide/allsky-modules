@@ -21,8 +21,12 @@ ring around each frame, and encodes the result with ffmpeg to
   `timelapseheight`, `timelapsefps`, `timelapsebitrate`, `timelapsevcodec`,
   `timelapsepixfmt` and `timelapsefflog` settings are used.
 - Uploads use the standard `scripts/upload.sh` and honor `uselocalwebsite`,
-  `useremotewebsite` and `useremotewebserver`, placing the video in the
-  website's `videos` directory.
+  `useremotewebsite` and `useremoteserver`. The video is uploaded with its
+  dated filename (`keolapse-YYYYMMDD.mp4`) into a dedicated subdirectory
+  (default `keolapses`, configurable) so it never overwrites the regular
+  timelapse video. For remote (sftp/scp/ftp) destinations this subdirectory
+  must already exist on the server; the local-website subdirectory is created
+  automatically.
 
 ## Events
 
