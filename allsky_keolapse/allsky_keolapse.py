@@ -281,7 +281,7 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 		"name": "Keolapse Generator",
 		"description": "Creates a timelapse video with the keogram wrapped as a ring around the sky image",
 		"module": "allsky_keolapse",
-		"version": "v0.9.1",
+		"version": "v0.9.2",
 		"pythonversion": "3.10.0",
 		"centersettings": "false",
 		"testable": "true",
@@ -336,6 +336,8 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 			"max_length": "120",
 			"upload": "false",
 			"upload_subdir": "keolapses",
+			"upload_thumbnail": "true",
+			"thumbnail_width": "100",
 			"circle_radius_factor": "0.47",
 			"center_x_offset": "0",
 			"center_y_offset": "0",
@@ -426,6 +428,27 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 				"description": "Upload Subdirectory",
 				"help": "Subdirectory under the website/server image directory to upload keolapse videos into (e.g. <code>keolapses</code>). Keeps keolapse videos separate from the regular timelapse <code>videos</code> directory. The uploaded file keeps its dated name (keolapse-YYYYMMDD.mp4). For remote (sftp/scp/ftp) uploads this directory must already exist on the server.",
 				"tab": "Video"
+			},
+			"upload_thumbnail": {
+				"required": "false",
+				"description": "Create &amp; Upload Thumbnail",
+				"help": "Create a JPEG thumbnail from the video and upload it to a <code>thumbnails</code> subdirectory of the upload directory (e.g. <code>keolapses/thumbnails/keolapse-YYYYMMDD.jpg</code>). Website galleries that pair each video with a thumbnail need this; without it the gallery page may not display the video. For remote uploads the <code>thumbnails</code> directory must already exist on the server.",
+				"tab": "Video",
+				"type": {
+					"fieldtype": "checkbox"
+				}
+			},
+			"thumbnail_width": {
+				"required": "false",
+				"description": "Thumbnail Width",
+				"help": "Width in pixels of the generated thumbnail (height scales to keep aspect ratio). Match your website's thumbnail size (Allsky default is 100).",
+				"tab": "Video",
+				"type": {
+					"fieldtype": "spinner",
+					"min": 50,
+					"max": 400,
+					"step": 10
+				}
 			},
 			"circle_radius_factor": {
 				"required": "true",
@@ -638,6 +661,17 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 		},
 		"businfo": [],
 		"changelog": {
+			"v0.9.2": [
+				{
+					"author": "Andy Felong",
+					"authorurl": "https://github.com/AndyOfLinux",
+					"changes": [
+						"Create a JPEG thumbnail from the video and upload it to a 'thumbnails' subdirectory (keolapse-YYYYMMDD.jpg), matching the Allsky website gallery convention",
+						"Added 'Create & Upload Thumbnail' (default on) and 'Thumbnail Width' (default 100) settings",
+						"Refactored upload into a reusable helper shared by the video and thumbnail uploads"
+					]
+				}
+			],
 			"v0.9.1": [
 				{
 					"author": "Andy Felong",
@@ -730,6 +764,8 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 		self.resolution = self.get_param('resolution', '720p', str, True)
 		self.upload = self._get_bool('upload', False)
 		self.upload_subdir = (self.get_param('upload_subdir', 'keolapses', str) or 'keolapses').strip().strip('/')
+		self.upload_thumbnail = self._get_bool('upload_thumbnail', True)
+		self.thumbnail_width = self.get_param('thumbnail_width', 100, int)
 
 		# Image / ring settings
 		self.circle_radius_factor = self.get_param('circle_radius_factor', 0.47, float)
@@ -1398,21 +1434,13 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 			return subdir
 		return f'{base}/{subdir}' if subdir else base
 
-	def _upload_video(self, video_path, file_name):
-		'''Upload the keolapse video via Allsky's standard upload.sh.
+	def _build_upload_targets(self, subdir):
+		'''Build the list of (flag, destination_dir) for each enabled upload target.
 
-		The video is uploaded with its dated filename (keolapse-YYYYMMDD.mp4)
-		into a dedicated subdirectory (default "keolapses") of each enabled
-		destination, so it never collides with the regular timelapse video.
-
-		Note: for remote sftp/scp/ftp uploads, upload.sh does NOT create the
-		destination directory - it must already exist on the server. The
-		local-website directory is created here automatically.
+		subdir is appended to each destination's image directory. For the local
+		website the directory is created here; remote directories must already
+		exist on the server (upload.sh will not create them).
 		'''
-		upload_script = os.path.join(self._allsky_home, 'scripts', 'upload.sh')
-		subdir = self.upload_subdir
-		messages = []
-
 		targets = []
 
 		# Local Allsky Website (on the Pi) - we can create the directory.
@@ -1422,43 +1450,118 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 				os.makedirs(local_dir, exist_ok=True)
 			except Exception as e:
 				self.klog(0, f'ERROR: could not create local website dir {local_dir}: {e}')
-			targets.append(('--local-web', local_dir, file_name))
+			targets.append(('--local-web', local_dir))
 
 		# Remote Allsky Website (sftp/scp/ftp/etc via upload.sh).
 		if self._setting_bool('useremotewebsite'):
 			remote_dir = self._join_remote_dir(
 				self._setting_str('remotewebsiteimagedir', ''), subdir)
-			targets.append(('--remote-web', remote_dir, file_name))
+			targets.append(('--remote-web', remote_dir))
 
 		# Remote server (note: the core setting is "useremoteserver").
 		if self._setting_bool('useremoteserver') or self._setting_bool('useremotewebserver'):
 			remote_dir = self._join_remote_dir(
 				self._setting_str('remoteserverimagedir', ''), subdir)
-			targets.append(('--remote-server', remote_dir, file_name))
+			targets.append(('--remote-server', remote_dir))
+
+		return targets
+
+	def _upload_one(self, file_path, file_name, subdir, label):
+		'''Upload a single file to each enabled destination under subdir.
+
+		Returns a short status string summarising each destination.
+		'''
+		upload_script = os.path.join(self._allsky_home, 'scripts', 'upload.sh')
+		targets = self._build_upload_targets(subdir)
 
 		if not targets:
-			self.klog(1, 'Upload requested but no Allsky Website or remote server is enabled in Allsky Settings')
+			self.klog(1, f'{label} upload requested but no Allsky Website or remote server is enabled in Allsky Settings')
 			return 'no upload targets configured'
 
-		for target, remote_dir, target_file in targets:
+		messages = []
+		for target, remote_dir in targets:
 			rc, _out, err = self._execute_script(
-				upload_script, target, video_path, remote_dir, target_file)
+				upload_script, target, file_path, remote_dir, file_name)
 			if rc == 0:
-				self.klog(1, f'Keolapse uploaded successfully via {target} to {remote_dir}/{target_file}')
+				self.klog(1, f'{label} uploaded successfully via {target} to {remote_dir}/{file_name}')
 				messages.append(f'{target} ok')
 			else:
 				err_text = (err or '').strip()
 				# sftp/scp fail this way when the subdir is missing on the server.
 				if 'cd' in err_text.lower() or 'no such file' in err_text.lower():
 					self.klog(0,
-						f"ERROR: Upload via {target} failed (rc={rc}). The '{subdir}' "
+						f"ERROR: {label} upload via {target} failed (rc={rc}). The '{subdir}' "
 						f"directory may not exist on the destination: {remote_dir}. "
 						f"Create it once on the server, then retry. STDERR:\n{err_text}")
 				else:
-					self.klog(0, f'ERROR: Failed to upload keolapse via {target} (rc={rc}). STDERR:\n{err_text}')
+					self.klog(0, f'ERROR: Failed to upload {label} via {target} (rc={rc}). STDERR:\n{err_text}')
 				messages.append(f'{target} failed')
 
 		return ', '.join(messages)
+
+	def _upload_video(self, video_path, file_name):
+		'''Upload the keolapse video into upload_subdir of each enabled destination.
+
+		Uploaded with its dated filename (keolapse-YYYYMMDD.mp4) so it never
+		collides with the regular timelapse video.
+		'''
+		return self._upload_one(video_path, file_name, self.upload_subdir, 'Keolapse video')
+
+	def _create_thumbnail(self, video_path):
+		'''Extract a single representative frame from the video as a JPEG thumbnail.
+
+		The thumbnail matches the Allsky website convention: same dated stem as
+		the video but with a .jpg extension, scaled to thumbnail_width. Returns
+		the local thumbnail path, or None on failure.
+		'''
+		try:
+			if not self._check_ffmpeg_available():
+				self.klog(0, 'ERROR: ffmpeg not found, cannot create thumbnail')
+				return None
+
+			thumb_path = os.path.splitext(video_path)[0] + '.jpg'
+			width = max(10, int(self.thumbnail_width))
+
+			# Seek a little into the video for a representative (non-black) frame.
+			cmd = [
+				'ffmpeg', '-y',
+				'-ss', '2',
+				'-i', video_path,
+				'-frames:v', '1',
+				'-update', '1',
+				'-vf', f'scale={width}:-1',
+				thumb_path
+			]
+			proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+
+			if proc.returncode != 0 or not os.path.exists(thumb_path):
+				# Retry from the first frame if the seek landed past the end.
+				cmd_retry = [
+					'ffmpeg', '-y',
+					'-i', video_path,
+					'-frames:v', '1',
+					'-update', '1',
+					'-vf', f'scale={width}:-1',
+					thumb_path
+				]
+				proc = subprocess.run(cmd_retry, capture_output=True, text=True, check=False)
+
+			if not os.path.exists(thumb_path):
+				self.klog(0, f'ERROR: thumbnail not created. ffmpeg STDERR:\n{(proc.stderr or "").strip()}')
+				return None
+
+			self.klog(1, f'Created thumbnail: {thumb_path} (width {width})')
+			return thumb_path
+
+		except Exception as e:
+			self.klog(0, f'ERROR: creating thumbnail failed: {e}')
+			return None
+
+	def _upload_thumbnail(self, thumb_path):
+		'''Upload the thumbnail into the thumbnails/ subdirectory of upload_subdir.'''
+		thumb_subdir = self._join_remote_dir(self.upload_subdir, 'thumbnails')
+		return self._upload_one(
+			thumb_path, os.path.basename(thumb_path), thumb_subdir, 'Keolapse thumbnail')
 
 	def _save_extra_data(self, output_path, frames, fps):
 		'''Publish AS_KEOLAPSE_* variables for the overlay system.'''
@@ -1526,12 +1629,21 @@ class ALLSKYKEOLAPSE(ALLSKYMODULEBASE):
 
 			result = f'Video created successfully: {output_path}'
 
+			# Create a thumbnail so website galleries that pair each video with a
+			# thumbnail (e.g. <subdir>/thumbnails/keolapse-YYYYMMDD.jpg) display it.
+			thumb_path = None
+			if self.upload_thumbnail:
+				thumb_path = self._create_thumbnail(output_path)
+
 			# Upload handling: in [Test Module] runs only upload when upload_test
 			# is enabled; in normal runs honor the upload setting.
 			do_upload = self.upload_test if self.debugmode else self.upload
 			if do_upload:
 				upload_result = self._upload_video(output_path, os.path.basename(output_path))
 				result = f'{result} (upload: {upload_result})'
+				if self.upload_thumbnail and thumb_path:
+					thumb_result = self._upload_thumbnail(thumb_path)
+					result = f'{result} (thumbnail: {thumb_result})'
 
 			return result
 
