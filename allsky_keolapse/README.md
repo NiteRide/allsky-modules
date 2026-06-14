@@ -52,3 +52,11 @@ extra requirements.
 
 Original module by Jim Cauthen. v2025 refactor by Andy Felong
 (Martz-Kohl Observatory).
+
+### Thumbnails
+- A JPEG thumbnail is generated from the video and uploaded to a `thumbnails`
+  subdirectory of the upload directory (e.g. `keolapses/thumbnails/keolapse-YYYYMMDD.jpg`),
+  matching the Allsky website gallery convention. Controlled by the
+  "Create & Upload Thumbnail" setting (default on) and "Thumbnail Width"
+  (default 100). For remote destinations the `thumbnails` directory must
+  already exist on the server.
